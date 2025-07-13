@@ -25,8 +25,10 @@ export function getMetricsUrl() {
   const parsed = new URL(gateway);
   const type = process.env.INPUT_GATEWAYTYPE;
   if (type === "prometheus") {
-    const labels = getLabels();
-    parsed.pathname = `/metrics/job/${labels.job}/workflow/${labels.workflow}`;
+    if (!parsed.pathname || parsed.pathname === "" || parsed.pathname === "/" || parsed.pathname === "/metrics") {
+      const labels = getLabels();
+      parsed.pathname = `/metrics/job/${labels.job}/workflow/${labels.workflow}`;
+    }
   } else if (parsed.pathname !== "/metrics") {
     parsed.pathname = "/metrics";
   }
